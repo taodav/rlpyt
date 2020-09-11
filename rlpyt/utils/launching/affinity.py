@@ -221,6 +221,8 @@ def build_cpu_affinity(slt, cpu, cpr, cpw=1, hto=None, res=0, skt=1, gpu=0,
     assert gpu == 0
     assert cpu % cpr == 0
     hto = cpu if hto is None else hto  # Default is None, 0 is OFF.
+    # print(f"build_cpu_affinity - hto: {hto}, cpu: {cpu}, skt: {skt}")
+    # print(f"Is this 0? {(hto - cpu) % skt}")
     assert (hto - cpu) % skt == 0
     n_run_slots = cpu // cpr
     assert slt <= n_run_slots
@@ -265,6 +267,7 @@ def build_gpu_affinity(slt, gpu, cpu, cxg=1, cpw=1, hto=None, res=0, skt=1,
     cpr = cpu // n_ctx
     if cxg > 1:
         slt = (slt % gpu) * cxg + slt // gpu  # Spread over GPUs first.
+    print(f"build_gpu_affinity - hto: {hto}, cpu: {cpu}, skt: {skt}")
     affinity = build_cpu_affinity(slt, cpu, cpr,
         cpw=cpw, hto=hto, res=res, skt=skt, gpu=0, alt=alt, saf=saf)
     affinity["cuda_idx"] = slt // cxg

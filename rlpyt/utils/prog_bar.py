@@ -1,6 +1,5 @@
 
-
-import pyprind
+from tqdm import tqdm
 from rlpyt.utils.logging import logger
 
 
@@ -16,18 +15,24 @@ class ProgBarCounter:
         self.cur_progress = 0
         self.cur_count = 0
         if not logger.get_log_tabular_only():
-            self.pbar = pyprind.ProgBar(self.max_progress)
+            self.pbar = tqdm(total=total_count)
         else:
             self.pbar = None
 
     def update(self, current_count):
         if not logger.get_log_tabular_only():
+            diff = current_count - self.cur_count
             self.cur_count = current_count
-            new_progress = self.cur_count * self.max_progress / self.total_count
-            if new_progress < self.max_progress:
-                self.pbar.update(new_progress - self.cur_progress)
-            self.cur_progress = new_progress
+            # new_progress = self.cur_count * self.max_progress / self.total_count
+            # if new_progress < self.max_progress:
+            #     self.pbar.update(new_progress - self.cur_progress)
+            self.pbar.update(diff)
+            # self.cur_progress = new_progress
 
     def stop(self):
-        if self.pbar is not None and self.pbar.active:
-                self.pbar.stop()
+        if self.pbar is not None:
+            self.pbar.close()
+
+    def set_description(self, string):
+        self.pbar.set_description(string)
+

@@ -6,16 +6,18 @@ from rlpyt.utils.launching.variant import make_variants, VariantLevel
 script = "rlpyt/experiments/scripts/atari/dqn/train/atari_catdqn_gpu.py"
 affinity_code = encode_affinity(
     n_cpu_core=4,
+    contexts_per_gpu=4,
     n_gpu=1,
     hyperthread_offset=8,
-    n_socket=1,
+    # n_socket=1,
     # cpu_per_run=2,
 )
-runs_per_setting = 2
+runs_per_setting = 4
 experiment_title = "atari_catdqn_basic"
 variant_levels = list()
 
-games = ["pong", "seaquest", "qbert", "chopper_command"]
+# games = ["pong", "seaquest", "qbert", "chopper_command"]
+games = ["pong"]
 values = list(zip(games))
 dir_names = ["{}".format(*v) for v in values]
 keys = [("env", "game")]

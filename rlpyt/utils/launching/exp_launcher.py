@@ -66,6 +66,7 @@ def launch_experiment(
     call_list += [str(a) for a in args]
     save_variant(variant, log_dir)
     print("\ncall string:\n", " ".join(call_list))
+    print(os.getcwd())
     if set_egl_device and affinity.get("cuda_idx", None) is not None:
         egl_device_id = str(affinity["cuda_idx"])
         egl_env = os.environ.copy()
